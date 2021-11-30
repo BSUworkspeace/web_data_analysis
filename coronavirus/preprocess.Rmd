@@ -1,0 +1,50 @@
+---
+title: "Preprocessing: COVID-19"
+author: "Samuel Chan"
+date: "2/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Step-by-step pre-processing
+```{r}
+corona <- read.csv("data_input/corona.csv")
+corona$date <- as.Date(corona$date)
+str(corona)
+```
+
+Confirm that each country has one record per day:
+```{r}
+# change SG to CN and compare:
+corona[corona$countryCode == "SG" & corona$date == as.Date("2020-02-14"), ]
+```
+
+```{r}
+xtabs(formula=mpg ~ cyl, data=mtcars)
+```
+
+```{r}
+x <- aggregate(
+          x=corona[, c("confirmed", "cured", "dead")], 
+          by=corona[, c("date", "countryCode")],
+          FUN=sum)
+
+tail(x)
+```
+
+
+
+```{r}
+vs <- corona[,c("confirmed", "suspected", "cured", "dead")]
+dat <- aggregate(vs, by=corona[,c("date", "countryCode")], FUN=sum)
+str(dat)
+```
+
+```{r}
+tail(dat)
+```
+
